@@ -38,3 +38,9 @@ The application is deployed using GitHub Pages and can be accessed here:
 ---
 
 ## 📂 Project Structure
+studnet_spin_wheel/
+│
+├── index.html # Main webpage
+├── style.css # Styling file
+├── style.js # JavaScript logic for spinning
+└── README.md # Project documentation
