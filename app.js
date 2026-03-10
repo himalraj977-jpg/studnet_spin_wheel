@@ -1,45 +1,41 @@
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
-let students = [
+const names = [
 "Alice",
 "Bob",
 "Charlie",
-"David"
+"David",
+"Emma",
+"Frank"
 ];
 
 const colors = [
-"#FF6384",
-"#36A2EB",
-"#FFCE56",
-"#4CAF50",
-"#FF9800",
-"#9C27B0",
-"#00BCD4",
-"#E91E63"
+"red",
+"blue",
+"green",
+"orange",
+"purple",
+"pink"
 ];
 
 const centerX = 250;
 const centerY = 250;
-const radius = 220;
-
-let startAngle = 0;
+const radius = 200;
 
 function drawWheel(){
 
-ctx.clearRect(0,0,500,500);
+let slice = 2*Math.PI / names.length;
 
-let slice = 2*Math.PI / students.length;
+for(let i=0;i<names.length;i++){
 
-for(let i=0;i<students.length;i++){
-
-let angle = startAngle + i*slice;
+let angle = i * slice;
 
 ctx.beginPath();
 
 ctx.moveTo(centerX,centerY);
 
-ctx.fillStyle = colors[i % colors.length];
+ctx.fillStyle = colors[i];
 
 ctx.arc(centerX,centerY,radius,angle,angle+slice);
 
@@ -51,9 +47,9 @@ ctx.translate(centerX,centerY);
 ctx.rotate(angle + slice/2);
 
 ctx.fillStyle="white";
-ctx.font="18px Arial";
+ctx.font="16px Arial";
 
-ctx.fillText(students[i],120,10);
+ctx.fillText(names[i],100,10);
 
 ctx.restore();
 
@@ -65,42 +61,9 @@ drawWheel();
 
 function spin(){
 
-let spinAngle = Math.random()*360 + 720;
-
-startAngle += spinAngle * Math.PI/180;
-
-drawWheel();
-
-let index = Math.floor(Math.random()*students.length);
+let random = Math.floor(Math.random()*names.length);
 
 document.getElementById("result").innerHTML =
-"Selected Student: " + students[index];
-
-}
-
-function addStudent(){
-
-let name = document.getElementById("studentName").value;
-
-if(name===""){
-alert("Enter a student name");
-return;
-}
-
-students.push(name);
-
-document.getElementById("studentName").value="";
-
-drawWheel();
-
-}
-
-function resetWheel(){
-
-students = [];
-
-drawWheel();
-
-document.getElementById("result").innerHTML="Wheel Reset";
+"Selected Student: " + names[random];
 
 }
