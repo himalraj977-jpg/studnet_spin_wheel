@@ -1,6 +1,6 @@
 body{
+font-family: Arial;
 text-align:center;
-font-family:Arial;
 background:#f4f4f4;
 }
 
@@ -9,42 +9,46 @@ margin-top:20px;
 }
 
 .wheel-container{
+position:relative;
+width:500px;
 margin:auto;
-width:520px;
 }
 
 canvas{
-border:6px solid #333;
 border-radius:50%;
-background:white;
+border:10px solid #333;
+}
+
+#spinBtn{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+padding:20px 30px;
+font-size:18px;
+background:red;
+color:white;
+border:none;
+border-radius:50%;
+cursor:pointer;
 }
 
 .controls{
-margin-top:20px;
+margin-top:30px;
 }
 
 input{
-padding:8px;
+padding:10px;
 font-size:16px;
 }
 
 button{
-padding:10px 20px;
+padding:10px 15px;
 margin:5px;
-font-size:16px;
-background:#ff9800;
-color:white;
-border:none;
-border-radius:6px;
 cursor:pointer;
-}
-
-button:hover{
-background:#e68900;
 }
 
 #result{
 margin-top:20px;
-font-size:24px;
-color:#333;
+color:green;
 }
