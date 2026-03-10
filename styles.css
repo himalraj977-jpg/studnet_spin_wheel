@@ -1,75 +1,41 @@
 body{
-font-family: Arial, sans-serif;
-background: linear-gradient(135deg,#667eea,#764ba2);
-text-align:center;
-margin:0;
-padding:0;
-color:white;
-}
-
-.container{
-max-width:900px;
-margin:auto;
-padding:30px;
+    text-align:center;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f5f5f5;
 }
 
 h1{
-font-size:40px;
-margin-bottom:10px;
-}
-
-textarea{
-width:80%;
-height:80px;
-padding:10px;
-font-size:16px;
-border-radius:8px;
-border:none;
-}
-
-button{
-padding:15px 35px;
-font-size:18px;
-border:none;
-border-radius:8px;
-margin:10px;
-cursor:pointer;
-background:#ff9800;
-color:white;
-}
-
-button:hover{
-background:#e68900;
+    margin-top:20px;
 }
 
 .wheel-container{
-display:flex;
-justify-content:center;
-margin-top:20px;
+    margin:auto;
+    width:520px;
 }
 
 canvas{
-border-radius:50%;
-background:white;
-box-shadow:0 0 20px rgba(0,0,0,0.3);
-transition:0.3s;
+    background:white;
+    border:5px solid #333;
+    border-radius:50%;
 }
 
-canvas:hover{
-transform:scale(1.05);
+button{
+    margin-top:20px;
+    padding:12px 30px;
+    font-size:18px;
+    background:#ff9800;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
 }
 
-#spin{
-background:#28a745;
-font-size:22px;
-}
-
-#spin:hover{
-background:#218838;
+button:hover{
+    background:#e68900;
 }
 
 #result{
-margin-top:20px;
-font-size:28px;
-color:#ffd700;
+    margin-top:20px;
+    font-size:24px;
+    color:#333;
 }
