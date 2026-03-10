@@ -1,17 +1,37 @@
 body{
 text-align:center;
 font-family:Arial;
-background:#f2f2f2;
+background:#f4f4f4;
+}
+
+h1{
+margin-top:20px;
+}
+
+.wheel-container{
+margin:auto;
+width:520px;
 }
 
 canvas{
-border:5px solid black;
+border:6px solid #333;
 border-radius:50%;
+background:white;
+}
+
+.controls{
+margin-top:20px;
+}
+
+input{
+padding:8px;
+font-size:16px;
 }
 
 button{
-padding:12px 25px;
-font-size:18px;
+padding:10px 20px;
+margin:5px;
+font-size:16px;
 background:#ff9800;
 color:white;
 border:none;
@@ -21,4 +41,10 @@ cursor:pointer;
 
 button:hover{
 background:#e68900;
+}
+
+#result{
+margin-top:20px;
+font-size:24px;
+color:#333;
 }
