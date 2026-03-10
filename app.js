@@ -1,54 +1,51 @@
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
-const students = [
+let names = [
 "Alice",
 "Bob",
 "Charlie",
 "David",
-"Emma",
-"Frank"
+"Eve"
 ];
 
-const colors = [
-"red",
-"blue",
-"green",
-"orange",
-"purple",
-"pink"
-];
-
-const centerX = 250;
-const centerY = 250;
-const radius = 200;
+let startAngle = 0;
 
 function drawWheel(){
 
-const slice = 2 * Math.PI / students.length;
+let arc = Math.PI * 2 / names.length;
 
-for(let i = 0; i < students.length; i++){
+ctx.clearRect(0,0,500,500);
 
-let angle = i * slice;
+for(let i=0;i<names.length;i++){
+
+let angle = startAngle + i * arc;
 
 ctx.beginPath();
-ctx.moveTo(centerX, centerY);
 
-ctx.fillStyle = colors[i];
+ctx.fillStyle = i % 2 === 0 ? "#FFCC00" : "#66CCFF";
 
-ctx.arc(centerX, centerY, radius, angle, angle + slice);
+ctx.moveTo(250,250);
+
+ctx.arc(250,250,250,angle,angle+arc);
+
+ctx.lineTo(250,250);
 
 ctx.fill();
 
 ctx.save();
 
-ctx.translate(centerX, centerY);
-ctx.rotate(angle + slice/2);
+ctx.fillStyle="black";
 
-ctx.fillStyle = "white";
-ctx.font = "16px Arial";
+ctx.translate(250,250);
 
-ctx.fillText(students[i], 100, 10);
+ctx.rotate(angle + arc/2);
+
+ctx.textAlign="right";
+
+ctx.font="16px Arial";
+
+ctx.fillText(names[i],200,10);
 
 ctx.restore();
 }
@@ -57,11 +54,76 @@ ctx.restore();
 
 drawWheel();
 
-function spin(){
+document.getElementById("spinBtn").onclick = function(){
 
-let random = Math.floor(Math.random() * students.length);
+let spinAngle = Math.random()*10 + 10;
+
+let spinTime = 0;
+
+let spinDuration = 3000;
+
+function rotateWheel(){
+
+spinTime += 30;
+
+if(spinTime >= spinDuration){
+
+stopRotateWheel();
+
+return;
+
+}
+
+startAngle += spinAngle * Math.PI/180;
+
+drawWheel();
+
+requestAnimationFrame(rotateWheel);
+
+}
+
+rotateWheel();
+
+}
+
+function stopRotateWheel(){
+
+let degrees = startAngle * 180 / Math.PI + 90;
+
+let arc = 360 / names.length;
+
+let index = Math.floor((360 - degrees % 360) / arc);
 
 document.getElementById("result").innerHTML =
-"Selected Student: " + students[random];
+"Winner: " + names[index];
 
+}
+
+function addName(){
+
+let name = document.getElementById("nameInput").value;
+
+if(name==="") return;
+
+names.push(name);
+
+drawWheel();
+
+}
+
+function removeName(){
+
+names.pop();
+
+drawWheel();
+
+}
+
+function resetWheel(){
+
+names = [];
+
+drawWheel();
+
+document.getElementById("result").innerHTML="";
 }
