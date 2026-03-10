@@ -1,41 +1,69 @@
-body{
-    text-align:center;
-    font-family:Arial, Helvetica, sans-serif;
-    background:#f5f5f5;
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+
+const students = [
+"Alice","Bob","Charlie","David",
+"Emma","Frank","Grace","Helen"
+];
+
+const colors = [
+"#FF6384","#36A2EB","#FFCE56","#4CAF50",
+"#FF9800","#9C27B0","#00BCD4","#E91E63"
+];
+
+const centerX = 250;
+const centerY = 250;
+const radius = 230;
+
+const arc = (2*Math.PI)/students.length;
+
+let startAngle = 0;
+
+function drawWheel(){
+
+ctx.clearRect(0,0,500,500);
+
+for(let i=0;i<students.length;i++){
+
+let angle = startAngle + i*arc;
+
+ctx.beginPath();
+ctx.fillStyle = colors[i];
+
+ctx.moveTo(centerX,centerY);
+ctx.arc(centerX,centerY,radius,angle,angle+arc);
+
+ctx.fill();
+
+ctx.save();
+
+ctx.translate(centerX,centerY);
+ctx.rotate(angle + arc/2);
+
+ctx.fillStyle="white";
+ctx.font="18px Arial";
+
+ctx.fillText(students[i],120,10);
+
+ctx.restore();
+
 }
 
-h1{
-    margin-top:20px;
 }
 
-.wheel-container{
-    margin:auto;
-    width:520px;
-}
+drawWheel();
 
-canvas{
-    background:white;
-    border:5px solid #333;
-    border-radius:50%;
-}
+function spin(){
 
-button{
-    margin-top:20px;
-    padding:12px 30px;
-    font-size:18px;
-    background:#ff9800;
-    color:white;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-}
+let spinAngle = Math.random()*360 + 720;
 
-button:hover{
-    background:#e68900;
-}
+startAngle += spinAngle * Math.PI/180;
 
-#result{
-    margin-top:20px;
-    font-size:24px;
-    color:#333;
+drawWheel();
+
+let index = Math.floor(Math.random()*students.length);
+
+document.getElementById("result").innerHTML =
+"Selected Student: " + students[index];
+
 }
