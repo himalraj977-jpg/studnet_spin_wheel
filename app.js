@@ -23,7 +23,7 @@ let angle = startAngle + i * arc;
 
 ctx.beginPath();
 
-ctx.fillStyle = i % 2 === 0 ? "#FFCC00" : "#66CCFF";
+ctx.fillStyle = i % 2 === 0 ? "#FFD700" : "#87CEFA";
 
 ctx.moveTo(250,250);
 
@@ -48,6 +48,7 @@ ctx.font="16px Arial";
 ctx.fillText(names[i],200,10);
 
 ctx.restore();
+
 }
 
 }
@@ -126,4 +127,5 @@ names = [];
 drawWheel();
 
 document.getElementById("result").innerHTML="";
+
 }
