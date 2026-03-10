@@ -1,26 +1,36 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>Student Spin Wheel</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>🎡 Student Spin Wheel</h1>
-<p>Click the button to randomly select a student</p>
+<h1>🎯 Student Spin Wheel</h1>
+
+<div class="wheel-container">
 
 <canvas id="wheel" width="500" height="500"></canvas>
 
-<br><br>
+<button id="spinBtn">SPIN</button>
 
-<button onclick="spin()">SPIN</button>
+</div>
+
+<div class="controls">
+
+<input type="text" id="nameInput" placeholder="Enter name">
+
+<button onclick="addName()">Add Name</button>
+<button onclick="removeName()">Remove Name</button>
+<button onclick="resetWheel()">Reset Wheel</button>
+
+</div>
 
 <h2 id="result"></h2>
 
-<script src="style.js"></script>
+<script src="script.js"></script>
 
 </body>
-
 </html>
