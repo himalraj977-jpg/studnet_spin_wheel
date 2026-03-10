@@ -1,45 +1,45 @@
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
-const names = [
+let students = [
 "Alice",
 "Bob",
 "Charlie",
-"David",
-"Emma",
-"Frank",
-"Grace",
-"Helen"
+"David"
 ];
 
 const colors = [
-"red",
-"blue",
-"green",
-"orange",
-"purple",
-"pink",
-"cyan",
-"gold"
+"#FF6384",
+"#36A2EB",
+"#FFCE56",
+"#4CAF50",
+"#FF9800",
+"#9C27B0",
+"#00BCD4",
+"#E91E63"
 ];
 
 const centerX = 250;
 const centerY = 250;
-const radius = 200;
+const radius = 220;
+
+let startAngle = 0;
 
 function drawWheel(){
 
-const slice = 2*Math.PI / names.length;
+ctx.clearRect(0,0,500,500);
 
-for(let i=0;i<names.length;i++){
+let slice = 2*Math.PI / students.length;
 
-let angle = i*slice;
+for(let i=0;i<students.length;i++){
+
+let angle = startAngle + i*slice;
 
 ctx.beginPath();
 
 ctx.moveTo(centerX,centerY);
 
-ctx.fillStyle = colors[i];
+ctx.fillStyle = colors[i % colors.length];
 
 ctx.arc(centerX,centerY,radius,angle,angle+slice);
 
@@ -51,9 +51,9 @@ ctx.translate(centerX,centerY);
 ctx.rotate(angle + slice/2);
 
 ctx.fillStyle="white";
-ctx.font="16px Arial";
+ctx.font="18px Arial";
 
-ctx.fillText(names[i],100,10);
+ctx.fillText(students[i],120,10);
 
 ctx.restore();
 
@@ -63,11 +63,44 @@ ctx.restore();
 
 drawWheel();
 
-function spinWheel(){
+function spin(){
 
-let randomIndex = Math.floor(Math.random()*names.length);
+let spinAngle = Math.random()*360 + 720;
+
+startAngle += spinAngle * Math.PI/180;
+
+drawWheel();
+
+let index = Math.floor(Math.random()*students.length);
 
 document.getElementById("result").innerHTML =
-"Selected Student: " + names[randomIndex];
+"Selected Student: " + students[index];
+
+}
+
+function addStudent(){
+
+let name = document.getElementById("studentName").value;
+
+if(name===""){
+alert("Enter a student name");
+return;
+}
+
+students.push(name);
+
+document.getElementById("studentName").value="";
+
+drawWheel();
+
+}
+
+function resetWheel(){
+
+students = [];
+
+drawWheel();
+
+document.getElementById("result").innerHTML="Wheel Reset";
 
 }
