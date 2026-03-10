@@ -1,7 +1,7 @@
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
-const students = [
+const names = [
 "Alice",
 "Bob",
 "Charlie",
@@ -13,63 +13,61 @@ const students = [
 ];
 
 const colors = [
-"#FF6384",
-"#36A2EB",
-"#FFCE56",
-"#4CAF50",
-"#FF9800",
-"#9C27B0",
-"#00BCD4",
-"#E91E63"
+"red",
+"blue",
+"green",
+"orange",
+"purple",
+"pink",
+"cyan",
+"gold"
 ];
 
-const arc = (2 * Math.PI) / students.length;
-
-let startAngle = 0;
+const centerX = 250;
+const centerY = 250;
+const radius = 200;
 
 function drawWheel(){
 
-    for(let i=0;i<students.length;i++){
+const slice = 2*Math.PI / names.length;
 
-        let angle = startAngle + i * arc;
+for(let i=0;i<names.length;i++){
 
-        ctx.beginPath();
-        ctx.fillStyle = colors[i];
-        ctx.moveTo(250,250);
+let angle = i*slice;
 
-        ctx.arc(250,250,250,angle,angle+arc);
+ctx.beginPath();
 
-        ctx.lineTo(250,250);
-        ctx.fill();
+ctx.moveTo(centerX,centerY);
 
-        ctx.save();
+ctx.fillStyle = colors[i];
 
-        ctx.translate(250,250);
-        ctx.rotate(angle + arc/2);
+ctx.arc(centerX,centerY,radius,angle,angle+slice);
 
-        ctx.fillStyle = "white";
-        ctx.font = "18px Arial";
+ctx.fill();
 
-        ctx.fillText(students[i],120,10);
+ctx.save();
 
-        ctx.restore();
-    }
+ctx.translate(centerX,centerY);
+ctx.rotate(angle + slice/2);
+
+ctx.fillStyle="white";
+ctx.font="16px Arial";
+
+ctx.fillText(names[i],100,10);
+
+ctx.restore();
+
+}
+
 }
 
 drawWheel();
 
-function spin(){
+function spinWheel(){
 
-    let spinAngle = Math.random() * 360 + 720;
+let randomIndex = Math.floor(Math.random()*names.length);
 
-    startAngle += spinAngle * Math.PI/180;
+document.getElementById("result").innerHTML =
+"Selected Student: " + names[randomIndex];
 
-    ctx.clearRect(0,0,500,500);
-
-    drawWheel();
-
-    let index = Math.floor(Math.random()*students.length);
-
-    document.getElementById("result").innerHTML =
-    "Selected Student: " + students[index];
 }
