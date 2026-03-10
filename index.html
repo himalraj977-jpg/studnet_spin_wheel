@@ -9,15 +9,23 @@
 
 <h1>🎡 Student Spin Wheel</h1>
 
+<div class="wheel-container">
 <canvas id="wheel" width="500" height="500"></canvas>
+</div>
 
-<br><br>
+<div class="controls">
 
-<button onclick="spinWheel()">SPIN</button>
+<input id="studentName" placeholder="Enter student name">
+
+<button onclick="addStudent()">Add Student</button>
+<button onclick="spin()">Spin Wheel</button>
+<button onclick="resetWheel()">Reset</button>
+
+</div>
 
 <h2 id="result"></h2>
 
-<script src="style.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
