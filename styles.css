@@ -1,54 +1,70 @@
 body{
 font-family: Arial;
-text-align:center;
 background:#f4f4f4;
+text-align:center;
 }
 
-h1{
-margin-top:20px;
+.container{
+display:flex;
+justify-content:center;
+gap:60px;
+margin-top:40px;
 }
 
-.wheel-container{
-position:relative;
-width:500px;
-margin:auto;
+.roster{
+width:250px;
 }
 
-canvas{
-border-radius:50%;
-border:10px solid #333;
-}
-
-#spinBtn{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-padding:20px 30px;
-font-size:18px;
-background:red;
-color:white;
-border:none;
-border-radius:50%;
-cursor:pointer;
-}
-
-.controls{
-margin-top:30px;
-}
-
-input{
+textarea{
+width:100%;
+height:260px;
 padding:10px;
 font-size:16px;
 }
 
+.buttons{
+display:flex;
+flex-direction:column;
+gap:8px;
+margin-top:10px;
+}
+
 button{
-padding:10px 15px;
-margin:5px;
+padding:8px;
+font-size:15px;
 cursor:pointer;
 }
 
-#result{
+.wheel-section{
+position:relative;
+}
+
+canvas{
+background:white;
+border-radius:50%;
+box-shadow:0px 0px 10px rgba(0,0,0,0.3);
+}
+
+.pointer{
+font-size:40px;
+color:red;
+position:absolute;
+left:50%;
+top:-20px;
+transform:translateX(-50%);
+}
+
+.spinBtn{
 margin-top:20px;
-color:green;
+font-size:20px;
+padding:12px 30px;
+background:#4CAF50;
+color:white;
+border:none;
+border-radius:6px;
+}
+
+#winner{
+margin-top:20px;
+font-size:26px;
 }
