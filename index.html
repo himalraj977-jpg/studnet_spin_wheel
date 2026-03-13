@@ -1,42 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <title>Student Spin Wheel</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>🎯 Student Spin Wheel</h1>
+<h1>Student Spin Wheel</h1>
 
-<div class="wheel-container">
+<div class="container">
 
-<canvas id="wheel" width="500" height="500"></canvas>
+<!-- Roster -->
+<div class="roster">
 
-<button id="spinBtn">SPIN</button>
+<h2>Roster</h2>
 
-</div>
+<textarea id="names" placeholder="One name per line"></textarea>
 
-<div class="controls">
+<div class="buttons">
 
-<input type="text" id="nameInput" placeholder="Enter student name">
+<button onclick="updateWheel()">Update Wheel</button>
+<button onclick="shuffleNames()">Shuffle</button>
+<button onclick="clearNames()">Clear</button>
 
-<button onclick="addName()">Add Name</button>
-<button onclick="removeName()">Remove Name</button>
-<button onclick="resetWheel()">Reset Wheel</button>
-
-<button onclick="shuffleNames()">Shuffle Names</button>
-<button onclick="showTotal()">Total Names</button>
-<button onclick="addRandom()">Add Random</button>
-<button onclick="clearInput()">Clear Input</button>
-<button onclick="saveNames()">Save Names</button>
-<button onclick="loadNames()">Load Names</button>
+<button onclick="importRoster()">Import Roster</button>
+<button onclick="exportRoster()">Export Roster</button>
+<button onclick="cleanRoster()">Clean Roster</button>
 
 </div>
 
-<h2 id="result"></h2>
+</div>
+
+
+<!-- Spin Wheel -->
+<div class="wheel-section">
+
+<div class="pointer">▼</div>
+
+<canvas id="wheel" width="600" height="600"></canvas>
+
+<br>
+
+<button class="spinBtn" onclick="spin()">SPIN</button>
+
+<button onclick="removeWinner()">Remove Winner</button>
+<button onclick="undoRemove()">Undo Remove</button>
+
+<button onclick="resetHistory()">Reset History</button>
+<button onclick="copyHistory()">Copy History</button>
+<button onclick="exportHistory()">Export History</button>
+
+<h2 id="winner"></h2>
+
+</div>
+
+</div>
+
+<input type="file" id="fileInput" style="display:none">
 
 <script src="app.js"></script>
 
