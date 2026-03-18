@@ -1,227 +1,120 @@
+let names = [];
+let history = [];
+let lastWinner = "";
+let removedStack = [];
+
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
-let names = [];
-let history = [];
-let removedStack = [];
+function drawWheel() {
+    const angle = (2 * Math.PI) / names.length;
 
-let startAngle = 0;
-let arc;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-const colors = [
-"#FF6B6B",
-"#4ECDC4",
-"#FFD93D",
-"#6A4C93",
-"#00BBF9",
-"#F15BB5",
-"#9B5DE5",
-"#00F5D4"
-];
+    names.forEach((name, i) => {
+        ctx.beginPath();
+        ctx.moveTo(300, 300);
+        ctx.arc(300, 300, 300, i * angle, (i + 1) * angle);
+        ctx.fillStyle = i % 2 === 0 ? "#f39c12" : "#3498db";
+        ctx.fill();
 
-function updateWheel(){
-
-const input = document.getElementById("names").value;
-
-names = input.split("\n").filter(n => n.trim() !== "");
-
-drawWheel();
-
+        ctx.save();
+        ctx.translate(300, 300);
+        ctx.rotate(i * angle + angle / 2);
+        ctx.fillStyle = "white";
+        ctx.font = "16px Arial";
+        ctx.fillText(name, 150, 0);
+        ctx.restore();
+    });
 }
 
-function drawWheel(){
-
-if(names.length === 0) return;
-
-arc = Math.PI * 2 / names.length;
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-for(let i=0;i<names.length;i++){
-
-let angle = startAngle + i * arc;
-
-ctx.fillStyle = colors[i % colors.length];
-
-ctx.beginPath();
-ctx.moveTo(300,300);
-ctx.arc(300,300,300,angle,angle+arc,false);
-ctx.lineTo(300,300);
-ctx.fill();
-
-ctx.save();
-
-ctx.fillStyle="black";
-ctx.translate(300,300);
-ctx.rotate(angle + arc/2);
-ctx.textAlign="right";
-ctx.font="20px Arial";
-ctx.fillText(names[i],280,10);
-
-ctx.restore();
-
+function addName() {
+    const input = document.getElementById("nameInput");
+    if (input.value.trim() !== "") {
+        names.push(input.value.trim());
+        input.value = "";
+        drawWheel();
+    }
 }
 
+function spin() {
+    if (names.length === 0) return;
+
+    const randomIndex = Math.floor(Math.random() * names.length);
+    const winner = names[randomIndex];
+
+    lastWinner = winner;
+    history.push(winner);
+
+    document.getElementById("winner").innerText = winner;
+    updateHistoryDisplay();
 }
 
-function spin(){
-
-let spinAngle = Math.random()*2000 + 3000;
-
-startAngle += spinAngle * Math.PI/180;
-
-drawWheel();
-
-let degrees = startAngle * 180/Math.PI + 90;
-let arcd = arc * 180/Math.PI;
-let index = Math.floor((360 - degrees % 360) / arcd);
-
-let winner = names[index];
-
-document.getElementById("winner").innerHTML = "Winner: " + winner;
-
-history.push(winner);
-
+function reset() {
+    names = [];
+    drawWheel();
 }
 
-function shuffleNames(){
-
-for(let i = names.length -1; i>0; i--){
-
-let j = Math.floor(Math.random() * (i+1));
-
-[names[i],names[j]]=[names[j],names[i]];
-
+function updateHistoryDisplay() {
+    const list = document.getElementById("history");
+    list.innerHTML = "";
+    history.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        list.appendChild(li);
+    });
 }
 
-document.getElementById("names").value = names.join("\n");
+/* ===== NEW FUNCTIONS ===== */
 
-drawWheel();
-
+function exportRoster() {
+    const data = names.join("\n");
+    const blob = new Blob([data], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "roster.txt";
+    a.click();
 }
 
-function clearNames(){
+function importRoster(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
 
-names=[];
+    reader.onload = function(e) {
+        names = e.target.result.split("\n").filter(n => n.trim() !== "");
+        drawWheel();
+    };
 
-document.getElementById("names").value="";
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
+    reader.readAsText(file);
 }
 
-function cleanRoster(){
-
-names = [...new Set(names.map(n=>n.trim()).filter(n=>n!=""))];
-
-document.getElementById("names").value = names.join("\n");
-
-drawWheel();
-
+function removeWinner() {
+    if (lastWinner !== "") {
+        removedStack.push(lastWinner);
+        names = names.filter(n => n !== lastWinner);
+        lastWinner = "";
+        drawWheel();
+    }
 }
 
-function removeWinner(){
-
-let winnerText = document.getElementById("winner").innerText;
-
-if(!winnerText) return;
-
-let winner = winnerText.replace("Winner: ","");
-
-let index = names.indexOf(winner);
-
-if(index>-1){
-
-removedStack.push(winner);
-
-names.splice(index,1);
-
-document.getElementById("names").value = names.join("\n");
-
-drawWheel();
-
+function undoRemove() {
+    if (removedStack.length > 0) {
+        names.push(removedStack.pop());
+        drawWheel();
+    }
 }
 
+function copyHistory() {
+    navigator.clipboard.writeText(history.join("\n"));
+    alert("History copied!");
 }
 
-function undoRemove(){
-
-if(removedStack.length===0) return;
-
-let name = removedStack.pop();
-
-names.push(name);
-
-document.getElementById("names").value = names.join("\n");
-
-drawWheel();
-
+function resetHistory() {
+    history = [];
+    updateHistoryDisplay();
 }
 
-function resetHistory(){
-
-history=[];
-
-alert("History Reset");
-
+function cleanRoster() {
+    names = [...new Set(names.map(n => n.trim()))];
+    drawWheel();
 }
-
-function copyHistory(){
-
-navigator.clipboard.writeText(history.join("\n"));
-
-alert("History Copied");
-
-}
-
-function exportHistory(){
-
-let blob = new Blob([history.join("\n")],{type:"text/plain"});
-
-let a = document.createElement("a");
-
-a.href = URL.createObjectURL(blob);
-
-a.download="history.txt";
-
-a.click();
-
-}
-
-function exportRoster(){
-
-let blob = new Blob([names.join("\n")],{type:"text/plain"});
-
-let a=document.createElement("a");
-
-a.href=URL.createObjectURL(blob);
-
-a.download="roster.txt";
-
-a.click();
-
-}
-
-function importRoster(){
-
-document.getElementById("fileInput").click();
-
-}
-
-document.getElementById("fileInput").addEventListener("change",function(){
-
-let file = this.files[0];
-
-let reader = new FileReader();
-
-reader.onload=function(e){
-
-document.getElementById("names").value=e.target.result;
-
-updateWheel();
-
-};
-
-reader.readAsText(file);
-
-});
