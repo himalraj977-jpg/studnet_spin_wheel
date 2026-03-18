@@ -1,24 +1,44 @@
 body {
-    text-align: center;
     font-family: Arial;
+    background: #f5f5f5;
+    margin: 0;
 }
 
-.container {
+.main {
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    gap: 20px;
+    padding: 20px;
 }
 
-/* BIGGER WHEEL */
+.panel {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 45%;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+}
+
 canvas {
-    border: 4px solid black;
+    display: block;
+    margin: auto;
     border-radius: 50%;
+    border: 4px solid black;
+
+    /* 🔥 BIGGER WHEEL */
     width: 600px;
     height: 600px;
 }
 
+.btn-group {
+    margin-top: 10px;
+}
+
 button {
     margin: 5px;
-    padding: 8px 12px;
+    padding: 6px 10px;
     cursor: pointer;
 }
