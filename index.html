@@ -1,42 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Spin Wheel App</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Student Spin Wheel</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h1>🎯 Student Spin Wheel</h1>
+<div class="main">
 
-<div class="container">
-    <canvas id="wheel" width="600" height="600"></canvas>
+    <!-- LEFT PANEL -->
+    <div class="panel">
+        <h2>Roster</h2>
+        <textarea id="roster">Alice
+Bob
+Amul</textarea>
+
+        <div class="btn-group">
+            <button onclick="updateWheel()">Update Wheel</button>
+            <button onclick="shuffleRoster()">Shuffle</button>
+            <button onclick="clearRoster()">Clear</button>
+        </div>
+
+        <div class="btn-group">
+            <button onclick="importRoster()">Import Roster</button>
+            <button onclick="exportRoster()">Export Roster</button>
+            <button onclick="cleanRoster()">Clean Roster</button>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="panel">
+        <h2>Spin Wheel</h2>
+
+        <canvas id="wheel" width="700" height="700"></canvas>
+
+        <div class="controls">
+            <label>Spin Time (seconds)</label>
+            <input type="number" id="spinTime" value="5">
+
+            <label>Extra Turns</label>
+            <input type="number" id="extraTurns" value="8">
+
+            <button onclick="spin()">Spin</button>
+            <button onclick="removeWinner()">Remove Winner</button>
+            <button onclick="undoRemove()">Undo Remove</button>
+
+            <button onclick="resetHistory()">Reset History</button>
+            <button onclick="copyHistory()">Copy History</button>
+        </div>
+
+        <h3>Winner: <span id="winner"></span></h3>
+
+        <ul id="history"></ul>
+    </div>
+
 </div>
 
-<br>
-
-<input type="text" id="nameInput" placeholder="Enter name">
-<button onclick="addName()">Add</button>
-<button onclick="spin()">Spin</button>
-<button onclick="reset()">Reset</button>
-
-<br><br>
-
-<!-- NEW FUNCTIONS -->
-<button onclick="exportRoster()">Export Roster</button>
-<input type="file" onchange="importRoster(event)">
-<button onclick="removeWinner()">Remove Winner</button>
-<button onclick="undoRemove()">Undo Remove</button>
-<button onclick="copyHistory()">Copy History</button>
-<button onclick="resetHistory()">Reset History</button>
-<button onclick="cleanRoster()">Clean Roster</button>
-
-<h2>Winner: <span id="winner"></span></h2>
-
-<h3>History</h3>
-<ul id="history"></ul>
-
 <script src="app.js"></script>
-
 </body>
 </html>
