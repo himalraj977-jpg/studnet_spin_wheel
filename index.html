@@ -1,64 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Student Spin Wheel</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Spin Wheel App</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h1>Student Spin Wheel</h1>
+<h1>🎯 Student Spin Wheel</h1>
 
 <div class="container">
-
-<!-- Roster -->
-<div class="roster">
-
-<h2>Roster</h2>
-
-<textarea id="names" placeholder="One name per line"></textarea>
-
-<div class="buttons">
-
-<button onclick="updateWheel()">Update Wheel</button>
-<button onclick="shuffleNames()">Shuffle</button>
-<button onclick="clearNames()">Clear</button>
-
-<button onclick="importRoster()">Import Roster</button>
-<button onclick="exportRoster()">Export Roster</button>
-<button onclick="cleanRoster()">Clean Roster</button>
-
+    <canvas id="wheel" width="600" height="600"></canvas>
 </div>
-
-</div>
-
-
-<!-- Spin Wheel -->
-<div class="wheel-section">
-
-<div class="pointer">▼</div>
-
-<canvas id="wheel" width="600" height="600"></canvas>
 
 <br>
 
-<button class="spinBtn" onclick="spin()">SPIN</button>
+<input type="text" id="nameInput" placeholder="Enter name">
+<button onclick="addName()">Add</button>
+<button onclick="spin()">Spin</button>
+<button onclick="reset()">Reset</button>
 
+<br><br>
+
+<!-- NEW FUNCTIONS -->
+<button onclick="exportRoster()">Export Roster</button>
+<input type="file" onchange="importRoster(event)">
 <button onclick="removeWinner()">Remove Winner</button>
 <button onclick="undoRemove()">Undo Remove</button>
-
-<button onclick="resetHistory()">Reset History</button>
 <button onclick="copyHistory()">Copy History</button>
-<button onclick="exportHistory()">Export History</button>
+<button onclick="resetHistory()">Reset History</button>
+<button onclick="cleanRoster()">Clean Roster</button>
 
-<h2 id="winner"></h2>
+<h2>Winner: <span id="winner"></span></h2>
 
-</div>
-
-</div>
-
-<input type="file" id="fileInput" style="display:none">
+<h3>History</h3>
+<ul id="history"></ul>
 
 <script src="app.js"></script>
 
