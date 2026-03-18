@@ -1,120 +1,177 @@
 let names = [];
 let history = [];
-let lastWinner = "";
 let removedStack = [];
+let currentAngle = 0;
+let lastWinner = "";
 
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
+function updateWheel() {
+    const text = document.getElementById("roster").value;
+    names = text.split("\n").filter(n => n.trim() !== "");
+    drawWheel();
+}
+
 function drawWheel() {
-    const angle = (2 * Math.PI) / names.length;
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const radius = 300;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    if (names.length === 0) return;
+
+    const angle = (2 * Math.PI) / names.length;
+
     names.forEach((name, i) => {
+        let start = currentAngle + i * angle;
+        let end = start + angle;
+
         ctx.beginPath();
-        ctx.moveTo(300, 300);
-        ctx.arc(300, 300, 300, i * angle, (i + 1) * angle);
-        ctx.fillStyle = i % 2 === 0 ? "#f39c12" : "#3498db";
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, radius, start, end);
+        ctx.fillStyle = i % 2 === 0 ? "#ff7675" : "#74b9ff";
         ctx.fill();
 
         ctx.save();
-        ctx.translate(300, 300);
-        ctx.rotate(i * angle + angle / 2);
+        ctx.translate(cx, cy);
+        ctx.rotate(start + angle / 2);
         ctx.fillStyle = "white";
-        ctx.font = "16px Arial";
-        ctx.fillText(name, 150, 0);
+        ctx.font = "18px Arial";
+        ctx.fillText(name, 140, 0);
         ctx.restore();
     });
-}
-
-function addName() {
-    const input = document.getElementById("nameInput");
-    if (input.value.trim() !== "") {
-        names.push(input.value.trim());
-        input.value = "";
-        drawWheel();
-    }
 }
 
 function spin() {
     if (names.length === 0) return;
 
-    const randomIndex = Math.floor(Math.random() * names.length);
-    const winner = names[randomIndex];
+    let duration = document.getElementById("spinTime").value * 1000;
+    let turns = document.getElementById("extraTurns").value;
 
+    let start = null;
+    let totalRotation = turns * 2 * Math.PI + Math.random() * 2 * Math.PI;
+
+    function animate(time) {
+        if (!start) start = time;
+        let progress = time - start;
+
+        let ease = progress / duration;
+        currentAngle = totalRotation * ease;
+
+        drawWheel();
+
+        if (progress < duration) {
+            requestAnimationFrame(animate);
+        } else {
+            pickWinner();
+        }
+    }
+
+    requestAnimationFrame(animate);
+}
+
+function pickWinner() {
+    const slice = (2 * Math.PI) / names.length;
+    const index = Math.floor((2 * Math.PI - currentAngle % (2 * Math.PI)) / slice) % names.length;
+
+    let winner = names[index];
     lastWinner = winner;
-    history.push(winner);
 
     document.getElementById("winner").innerText = winner;
-    updateHistoryDisplay();
+
+    history.push(winner);
+    updateHistory();
 }
 
-function reset() {
-    names = [];
-    drawWheel();
-}
+function updateHistory() {
+    let ul = document.getElementById("history");
+    ul.innerHTML = "";
 
-function updateHistoryDisplay() {
-    const list = document.getElementById("history");
-    list.innerHTML = "";
-    history.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item;
-        list.appendChild(li);
+    history.forEach(h => {
+        let li = document.createElement("li");
+        li.textContent = h;
+        ul.appendChild(li);
     });
 }
 
-/* ===== NEW FUNCTIONS ===== */
+function removeWinner() {
+    if (!lastWinner) return;
+
+    removedStack.push(lastWinner);
+    names = names.filter(n => n !== lastWinner);
+
+    updateTextArea();
+    drawWheel();
+}
+
+function undoRemove() {
+    if (removedStack.length === 0) return;
+
+    names.push(removedStack.pop());
+    updateTextArea();
+    drawWheel();
+}
+
+function updateTextArea() {
+    document.getElementById("roster").value = names.join("\n");
+}
+
+function resetHistory() {
+    history = [];
+    updateHistory();
+}
+
+function copyHistory() {
+    navigator.clipboard.writeText(history.join("\n"));
+    alert("Copied!");
+}
 
 function exportRoster() {
-    const data = names.join("\n");
-    const blob = new Blob([data], { type: "text/plain" });
-    const a = document.createElement("a");
+    let blob = new Blob([names.join("\n")], { type: "text/plain" });
+    let a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "roster.txt";
     a.click();
 }
 
-function importRoster(event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
+function importRoster() {
+    let input = document.createElement("input");
+    input.type = "file";
 
-    reader.onload = function(e) {
-        names = e.target.result.split("\n").filter(n => n.trim() !== "");
-        drawWheel();
+    input.onchange = e => {
+        let file = e.target.files[0];
+        let reader = new FileReader();
+
+        reader.onload = function() {
+            document.getElementById("roster").value = reader.result;
+            updateWheel();
+        };
+
+        reader.readAsText(file);
     };
 
-    reader.readAsText(file);
-}
-
-function removeWinner() {
-    if (lastWinner !== "") {
-        removedStack.push(lastWinner);
-        names = names.filter(n => n !== lastWinner);
-        lastWinner = "";
-        drawWheel();
-    }
-}
-
-function undoRemove() {
-    if (removedStack.length > 0) {
-        names.push(removedStack.pop());
-        drawWheel();
-    }
-}
-
-function copyHistory() {
-    navigator.clipboard.writeText(history.join("\n"));
-    alert("History copied!");
-}
-
-function resetHistory() {
-    history = [];
-    updateHistoryDisplay();
+    input.click();
 }
 
 function cleanRoster() {
     names = [...new Set(names.map(n => n.trim()))];
+    updateTextArea();
     drawWheel();
 }
+
+function shuffleRoster() {
+    names.sort(() => Math.random() - 0.5);
+    updateTextArea();
+    drawWheel();
+}
+
+function clearRoster() {
+    names = [];
+    updateTextArea();
+    drawWheel();
+}
+
+/* LOAD DEFAULT */
+updateWheel();
