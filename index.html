@@ -1,63 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- task done by student-->
+
 <head>
-<meta charset="UTF-8">
-<title>Student Spin Wheel</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Spin Wheel</title>
+    <link rel="stylesheet" href="./styles.css" />
 </head>
 
 <body>
+    <div class="app">
+        <!-- Left: Roster -->
+        <section class="card">
+            <div class="card-header">
+                <h2>Roster</h2>
+                <span id="countPill" class="pill">0 students</span>
+            </div>
 
-<div class="main">
+            <div class="card-body">
+                <div class="mini">One name per line</div>
+                <textarea id="namesInput" placeholder="Alice&#10;Bob&#10;Charlie"></textarea>
 
-    <!-- LEFT PANEL -->
-    <div class="panel">
-        <h2>Roster</h2>
-        <textarea id="roster">Alice
-Bob
-Amul</textarea>
+                <div class="mini" style="margin-top:6px;">
+                    Tip: After editing names, click <b>Update Wheel</b>.
+                </div>
 
-        <div class="btn-group">
-            <button onclick="updateWheel()">Update Wheel</button>
-            <button onclick="shuffleRoster()">Shuffle</button>
-            <button onclick="clearRoster()">Clear</button>
-        </div>
+                <div class="row" style="margin-top:10px;">
+                    <button id="updateBtn" class="primary">Update Wheel</button>
+                    <button id="shuffleBtn">Shuffle</button>
+                    <button id="clearBtn" class="danger">Clear</button>
+                </div>
 
-        <div class="btn-group">
-            <button onclick="importRoster()">Import Roster</button>
-            <button onclick="exportRoster()">Export Roster</button>
-            <button onclick="cleanRoster()">Clean Roster</button>
-        </div>
+                <!-- NEW: Roster tools (Task A) -->
+                <div class="row" style="margin-top:10px;">
+                    <input id="importRosterInput" type="file" accept=".txt,.csv" style="display:none;">
+                    <button id="importRosterBtn">Import Roster</button>
+                    <button id="exportRosterBtn">Export Roster</button>
+                    <button id="cleanRosterBtn">Clean Roster</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right: Wheel + Controls -->
+        <section class="card">
+            <div class="card-header">
+                <h2>Spin Wheel</h2>
+            </div>
+
+            <div class="card-body wheel-layout">
+                <!-- Wheel -->
+                <div>
+                    <canvas id="wheel" width="520" height="520"></canvas>
+                </div>
+
+                <!-- Controls / Results / History -->
+                <div>
+                    <div class="history">
+                        <h3>Controls</h3>
+
+                        <div class="mini">Spin time (seconds)</div>
+                        <input id="spinTime" type="number" min="1" max="20" step="1" value="6" />
+
+                        <div class="mini" style="margin-top:10px;">Extra turns</div>
+                        <input id="spinTurns" type="number" min="0" max="20" step="1" value="8" />
+
+                        <div class="mini" style="margin-top:10px;">Name size on wheel</div>
+                        <div class="row row-tight">
+                            <input id="fontSize" type="range" min="14" max="34" value="24" />
+                            <span id="fontSizeLabel" class="pill">24 px</span>
+                        </div>
+
+                        <div class="mini" style="margin-top:10px;">Spin sound</div>
+                        <label class="toggle">
+                            <input id="soundToggle" type="checkbox" checked />
+                            <span>Sound</span>
+                        </label>
+
+                        <div class="mini" style="margin-top:10px;">No-repeat cycle</div>
+                        <label class="toggle">
+                            <input id="noRepeatToggle" type="checkbox" checked />
+                            <span>No-repeat</span>
+                        </label>
+
+                        <div class="mini" style="margin-top:10px;">
+                            If your browser blocks audio/speech, click <b>Spin</b> or <b>Read Name</b> once to allow it.
+                        </div>
+
+                        <div class="row" style="margin-top:12px; flex-wrap:wrap;">
+                            <button id="spinBtn" class="primary">Spin</button>
+                            <button id="speakBtn">Read Name</button>
+                            <button id="removeWinnerBtn">Remove Winner</button>
+                            <button id="undoRemoveBtn">Undo Remove</button>
+                            <button id="resetHistoryBtn" class="danger">Reset History</button>
+                            <button id="copyHistoryBtn">Copy History</button>
+                            <button id="exportHistoryBtn">Export History</button>
+                        </div>
+                    </div>
+
+                    <div class="history">
+                        <h3>Selected Student</h3>
+                        <div id="winnerName" class="winner">—</div>
+                        <div id="winnerSub" class="mini">Ready to spin.</div>
+                    </div>
+
+                    <!-- NEW: Groups (Task A) -->
+                    <div class="history">
+                        <h3>Groups</h3>
+                        <div class="row">
+                            <label class="mini" for="groupSizeInput">Group size</label>
+                            <input id="groupSizeInput" type="number" min="2" max="10" value="2"
+                                style="width:90px; padding:10px 12px; border-radius:12px; border:1px solid var(--ring);" />
+                            <button id="makeGroupsBtn">Make Groups</button>
+                        </div>
+                        <pre id="groupsOutput" class="mini"
+                            style="white-space:pre-wrap; margin:8px 0 0 0; padding:10px; border:1px dashed var(--ring); border-radius:12px; background:#fafafa;"></pre>
+                    </div>
+
+                    <div class="history">
+                        <h3>History</h3>
+                        <ul id="historyList"></ul>
+                    </div>
+
+                    <div class="history doc">
+                        <h3>Task B – Design & Documentation</h3>
+                        <div class="mini">
+                            Write a short document describing:
+                            <br>• your redesign choices,
+                            <br>• your new features (Task A),
+                            <br>• and your motivation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <!-- RIGHT PANEL -->
-    <div class="panel">
-        <h2>Spin Wheel</h2>
-
-        <canvas id="wheel" width="700" height="700"></canvas>
-
-        <div class="controls">
-            <label>Spin Time (seconds)</label>
-            <input type="number" id="spinTime" value="5">
-
-            <label>Extra Turns</label>
-            <input type="number" id="extraTurns" value="8">
-
-            <button onclick="spin()">Spin</button>
-            <button onclick="removeWinner()">Remove Winner</button>
-            <button onclick="undoRemove()">Undo Remove</button>
-
-            <button onclick="resetHistory()">Reset History</button>
-            <button onclick="copyHistory()">Copy History</button>
-        </div>
-
-        <h3>Winner: <span id="winner"></span></h3>
-
-        <ul id="history"></ul>
-    </div>
-
-</div>
-
-<script src="app.js"></script>
+    <script src="./app.js"></script>
 </body>
+
 </html>
